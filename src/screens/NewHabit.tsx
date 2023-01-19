@@ -54,9 +54,10 @@ export function NewHabit() {
             pl-3 
             rounded-lg 
             mt-3 
-            bg-zinc-800 
+            bg-zinc-900 
             text-white 
-            focus:border-2 
+            border-2 
+            border-zinc-800
             focus:border-green-600
           "
         />
