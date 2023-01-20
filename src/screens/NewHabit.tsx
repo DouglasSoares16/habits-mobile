@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { BackButton } from "../components/BackButton";
 import { Checkbox } from "../components/Checkbox";
 import colors from "tailwindcss/colors";
+import { api } from "../lib/axios";
 
 const availableWeekDays = [
   "Domingo",
@@ -17,6 +18,7 @@ const availableWeekDays = [
 ];
 
 export function NewHabit() {
+  const [title, setTitle] = useState("");
   const [weekDays, setWeekDays] = useState<number[]>([]);
 
   function handleToggleWeekDay(weekDayIndex: number) {
@@ -26,6 +28,28 @@ export function NewHabit() {
     else {
       setWeekDays(prevState => [...prevState, weekDayIndex]);
     };
+  }
+
+  async function createNewHabit() {
+    try {
+      if (!title.trim() || weekDays.length === 0) {
+        Alert.alert("Novo Hábito", "Informe o nome do hábito e a recorrência");
+      }
+
+      await api.post("/habits", {
+        title,
+        weekDays
+      });
+
+      setTitle("");
+      setWeekDays([]);
+
+      Alert.alert("Novo Hábito", "Hábito criado com sucesso!");
+    }
+    catch (error: any) {
+      console.log(error);
+      Alert.alert("Ops", "Não foi possível cadastrar o novo hábito");
+    }
   }
 
   return (
@@ -60,6 +84,8 @@ export function NewHabit() {
             border-zinc-800
             focus:border-green-600
           "
+          value={title}
+          onChangeText={setTitle}
         />
 
         <Text className="font-semibold mt-4 mb-3 text-white text-base">Qual a recorrência?</Text>
@@ -87,6 +113,7 @@ export function NewHabit() {
             rounded-md
             mt-6
           "
+          onPress={createNewHabit}
         >
           <Feather
             name="check"
