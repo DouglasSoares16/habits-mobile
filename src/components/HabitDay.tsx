@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { Dimensions, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { generateProgressPercentage } from "../utils/generate-progress-percentage";
 
 const WEEK_DAYS = 7;
 const SCREEN_HORIZONTAL_PADDING = (32 * 2) / 5;
@@ -15,7 +16,9 @@ interface Props extends TouchableOpacityProps {
 }
 
 export function HabitDay({ amountOfHabits = 0, amountCompleted = 0, date, ...rest }: Props) {
-  const completedPercentage = amountOfHabits > 0 ? Math.round((amountCompleted / amountOfHabits) * 100) : 0;
+  const completedPercentage = amountOfHabits > 0 ?
+    generateProgressPercentage(amountOfHabits, amountCompleted) : 0;
+
   const today = dayjs().startOf("day").toDate();
   const isCurrentDay = dayjs(date).isSame(today);
 
