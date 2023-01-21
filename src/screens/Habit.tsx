@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { BackButton } from "../components/BackButton";
 import { Checkbox } from "../components/Checkbox";
+import { HabitsEmpty } from "../components/HabitsEmpty";
 import { Loading } from "../components/Loading";
 import { ProgressBar } from "../components/ProgressBar";
 import { api } from "../lib/axios";
@@ -110,14 +111,19 @@ export function Habit() {
 
         <View className="mt-6">
           {
-            habitsInfo?.possibleHabits.map((habit) => (
-              <Checkbox
-                key={habit.id}
-                title={habit.title}
-                checked={habitsInfo.completedHabits.includes(habit.id)}
-                onPress={() => handleToggleHabit(habit.id)}
-              />
-            ))
+            habitsInfo?.possibleHabits ?
+              (
+                habitsInfo?.possibleHabits.map((habit) => (
+                  <Checkbox
+                    key={habit.id}
+                    title={habit.title}
+                    checked={habitsInfo.completedHabits.includes(habit.id)}
+                    onPress={() => handleToggleHabit(habit.id)}
+                  />
+                ))
+              )
+              :
+              (<HabitsEmpty />)
           }
         </View>
       </ScrollView>
